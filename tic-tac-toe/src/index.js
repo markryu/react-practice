@@ -3,48 +3,85 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 
-
-function Square(props){
-    return(
-      <button
-        className="square"
-        onClick={props.onClick}
-        // onClick={() => props.onClick()}
-        // losing the parens on a functional component
-      >
-        { props.value }
-      </button>
-    )
-  }
-
-class Board extends React.Component {
-  constructor(props){
-    super(props);
-    this.state={
+// This contains all the components - super parent component
+class Game extends React.Component {
+  constructor(props) {
+  super(props);
+  this.state = {
+    history: [{
       squares: Array(9).fill(null),
-      XisNext: true,
-    }
-  }
+    }],
+    xIsNext: true,
+  };
+}
+  // functions can be created here
   handleClick(i) {
-    const squares = {...this.state.squares};
-      squares[i] = this.state.XisNext ? 'X' : 'O'
-      this.setState({
+    // copy of squares - immutable so that we can save the states for history
+    // spread is usesd but we can also use the splice javascript method of arrays
+    const history = this.state.history;
+    const current = history[history.length - 1];
+    const squares = { ...current.squares };
+
+    if (calculateWinner(squares) || squares[i]) {
+      return;
+    }
+    // inline if else statement
+    squares[i] = this.state.xIsNext ? 'X' : 'O';
+    this.setState({
+      history: history.concat([{
         squares: squares,
-        XisNext: !this.state.XisNext,
-      });
+      }]),
+      xIsNext: !this.state.xIsNext,
+    });
   }
-  renderSquare(i) {
-    return <Square
-      value={ this.state.squares[i] }
-      onClick={() => this.handleClick(i)}
-   />;
-  }
+
   render() {
-    const status = 'Next player: X' + (this.state.XisNext ? 'X' : 'O' );
+    const history = this.state.history;
+    const current = history[history.length - 1];
+    const winner = calculateWinner(current.squares);
+
+    let status;
+    if (winner) {
+      status = 'Winner: ' + winner;
+    } else {
+      status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+    }
 
     return (
+      <div className="game">
+        <div className="game-board">
+          <Board
+            squares={current.squares}
+            onClick={ (i) => this.handleClick(i) }
+          />
+        </div>
+        <div className="game-info">
+          <div>{ status }</div>
+          <ol>{/* TODO */}</ol>
+        </div>
+      </div>
+    );
+  }
+}
+
+class Board extends React.Component {
+  // props
+  // instead of having each square have a unique state - the state is transferred here as an array
+  // the handle click just uses this and is not under the prop method
+  renderSquare(i) {
+    return (
+      <Square
+        value={this.props.squares[i]}
+        onClick={ () => this.props.onClick(i) }
+      />
+    );
+  }
+
+  // main render
+  // js constants ccan be created here
+  render() {
+    return (
       <div>
-        <div className="status">{status}</div>
         <div className="board-row">
           {this.renderSquare(0)}
           {this.renderSquare(1)}
@@ -65,25 +102,41 @@ class Board extends React.Component {
   }
 }
 
-class Game extends React.Component {
-  render() {
-    return (
-      <div className="game">
-        <div className="game-board">
-          <Board />
-        </div>
-        <div className="game-info">
-          <div>{/* status */}</div>
-          <ol>{/* TODO */}</ol>
-        </div>
-      </div>
-    );
-  }
-}
 
+// function that is being called by a render square
+function Square(props) {
+  return (
+    <button className="square" onClick={props.onClick}>
+      {props.value}
+    </button>
+  );
+}
+function calculateWinner(squares) {
+  // this is all the patterns in which there are 3
+  // successive similar characters in a row
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
 // ========================================
 
 ReactDOM.render(
   <Game />,
   document.getElementById('root')
 );
+
+// The Game component wraps all the components - whithin the Game components - board contains the render square functions which calls the square component
