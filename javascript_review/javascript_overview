@@ -1,0 +1,36 @@
+Javascript uses C syntax and supports object-oriented programming using prototypes instead of classes.
+
+Javascript values are:
+    - Number
+        = There are no integers in javascript - just all numbers
+        = There is a built-in "Math" object to be used like this: Math.sin(3.5)
+        = parseInt will: parseInt('010', 10) = 10;
+        = parseFloat does the same but always does base 10
+        = isNaN("OBJECT HERE") to check if it is not a number
+        = infinity and -infinity are values within JS
+    - String
+        = str.length will reveal the length of the string
+        = str.charAt("NUMBER HERE")
+        = str.replace('WORD TO REPLACE', 'REPLACE WITH THIS')
+        = str.toUpperCase()
+    - Boolean
+        = Boolean('') = false;
+        = Boolean(123) = true;
+        = operators are &&, ||, !
+    - Function
+    - Object
+        - Function
+        - Array
+        - RegExp
+        - Date
+    - Symbol
+    - undefined
+    - null
+
+Variables in Javascript can be declared using let, var, const.
+    - let
+        = let is a block level variable
+    - const
+        = unchangeable within block level
+    - var
+        = var is only accessible when used within a function and further down
