@@ -34,3 +34,41 @@ Variables in Javascript can be declared using let, var, const.
         = unchangeable within block level
     - var
         = var is only accessible when used within a function and further down
+
+Control structures 
+    - if-else statements
+    - while statements
+    - for loops
+        - for (var i = 0; i < 5; i++){ //do something }
+        - for (let value of array/<ARRAY INSTANCE>) { //do something }
+    - ternary
+        - var allowed = (age > 18) ? 'yes' : 'no';
+    - switch
+    - switch (action) {
+        case 'draw';
+            drawIt();
+            break;
+        case 'eat';
+            eatIt();
+            break;
+        default:
+            doNothing();
+        }
+        - the action should have a value
+
+Objects in Javascript are like dictionary in Python
+    - var obj = new Object();
+    - function Person(name, age) {
+        this.name = name;
+        this.age = age;
+        }
+        // this is defining the object the prototype(Person)
+        - var you = new Person('You', 24);
+        - console.log(you) will print the Person attributes
+
+Arrays are like lists in Python
+    - var a = ['dog', 'cat']
+    - a[100] = 'fox'
+        - a.length // 101
+        - length is the last index + 1
+
